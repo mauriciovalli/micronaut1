@@ -1,0 +1,6 @@
+icon: https://github.com/okteto/spring-microservices/raw/master/icon.png
+deploy:
+  - okteto build -t registry.cloud.okteto.net/mauriciovalli/micronaut1:dev -f Dockerfile
+  - kubectl apply -f k8s/micronaut1.yaml
+devs:
+  - okteto.yml

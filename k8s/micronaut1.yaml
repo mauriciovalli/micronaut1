@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micronaut1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micronaut1
+  template:
+    metadata:
+      labels:
+        app: micronaut1
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: micronaut1
+        image: registry.cloud.okteto.net/mauriciovalli/micronaut1:dev
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: micronaut1
+data:
+  application.yml: |-
+    spring:
+     cloud:
+      kubernetes:
+        discovery:
+          all-namespaces: false
+          service-labels:
+            micronaut: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: micronaut1
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: micronaut1
