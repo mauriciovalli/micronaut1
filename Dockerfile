@@ -11,5 +11,6 @@ RUN native-image -jar micronaut1-0.1.jar -H:Name=output
 
 FROM scratch
 EXPOSE 8080
+WORKDIR /opt
 COPY --from=build /build/output /opt/output
-CMD ["/opt/output"]
+CMD ./output
